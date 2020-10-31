@@ -31,14 +31,14 @@
 <h1>Dashboard</h1>
 <p>You are currently logged in as {{ name }} UserID: {{ userid }} <a href='logout'>Logout</a></p>
 <!-- <p>Userlevel: {{ userlevel }}</p> -->
+<div id="nav">
+  {% include "nav.tmpl" %}
+</div>
 <hr>
 
 <h3>Angebot erstellen</h3>
 
 <div class="grid-container">
-  <div id="nav">
-    {% include "nav.tmpl" %}
-  </div>
   <div class="content">
     <!-- <center>
       <h1>{{ title }}</h1>
