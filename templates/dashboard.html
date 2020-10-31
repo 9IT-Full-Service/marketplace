@@ -1,3 +1,23 @@
+<html>
+<head>
+<style>
+div.menu {
+  float:left;
+  padding: 5px;
+  font-size: 10px;
+}
+.menu a:link, a:visited {
+  text-decoration: none;
+  color: rgb(9, 145, 173);
+}
+
+.menu a:hover {
+  text-decoration: underline;
+  color: rgb(145, 145, 173);
+}
+</style>
+</head>
+<body>
 <h1>Dashboard</h1>
 <p>You are currently logged in as {{ name }}
   <!-- UserID: {{ userid }}  -->
@@ -8,7 +28,8 @@
 <h3>Eigene Angebote</h3>
 
 <div class="grid-container">
-  <div class="nav">
+  <div id="nav">
+    {% include "nav.tmpl" %}
   </div>
   <div class="content">
     <!-- <center>
@@ -42,3 +63,5 @@
     </ul>
   </div>
 </div>
+</body>
+</html>

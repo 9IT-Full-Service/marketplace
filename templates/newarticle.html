@@ -10,6 +10,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/json2html/1.4.0/json2html.min.js"></script>
   <link href="/static/assets/main.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <style>
+  div.menu {
+    float:left;
+    padding: 5px;
+    font-size: 10px;
+  }
+  .menu a:link, a:visited {
+    text-decoration: none;
+    color: rgb(9, 145, 173);
+  }
+
+  .menu a:hover {
+    text-decoration: underline;
+    color: rgb(145, 145, 173);
+  }
+  </style>
 </head>
 <body>
 <h1>Dashboard</h1>
@@ -20,7 +36,8 @@
 <h3>Angebot erstellen</h3>
 
 <div class="grid-container">
-  <div class="nav">
+  <div id="nav">
+    {% include "nav.tmpl" %}
   </div>
   <div class="content">
     <!-- <center>
