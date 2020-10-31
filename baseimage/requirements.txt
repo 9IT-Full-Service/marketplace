@@ -1,0 +1,8 @@
+flask
+flask_mongoengine
+flask_wtf
+flask_login
+dnspython
+email_validator
+Flask-Cors==3.0.8
+requests

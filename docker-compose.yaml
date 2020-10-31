@@ -1,0 +1,52 @@
+version: "3"
+services:
+
+  marketplace:
+    image: marketplace:latest
+    build: .
+    dns:
+      - 8.8.8.8
+      - 9.9.9.9
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "8090:4006"
+    networks:
+      - mpnetwork
+    volumes:
+      - ./uploads:/app/static/uploads
+
+  api:
+    image: mpapibase:latest
+    build: api
+    env_file:
+      - .env
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5006:4006"
+    networks:
+      - mpnetwork
+
+  mongo:
+    image: mongojson
+    # build: mongoserver
+    ports:
+      - "28017:27017"
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/backup:/data/backup
+    networks:
+      - mpnetwork
+
+networks:
+  mpnetwork:
+
+
+  # fetch:
+  #   image: cms-fetch:1.0
+  #   build: fetchdm
+  #   volumes:
+  #     - ./fetchdm/logs:/app/logs
+  #   networks:
+  #     - cmsnetwork
