@@ -1,4 +1,5 @@
-FROM python:3
+FROM python:3.7-alpine
+# FROM python:3
 
 LABEL maintainer="Rüdiger Küpper <ruediger@kuepper.nrw"
 LABEL com.example.version="1.0.0"

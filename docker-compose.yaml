@@ -17,7 +17,7 @@ services:
       - ./uploads:/app/static/uploads
 
   api:
-    image: mpapibase:latest
+    image: mpapi:latest
     build: api
     env_file:
       - .env

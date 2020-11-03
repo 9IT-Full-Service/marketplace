@@ -6,26 +6,28 @@
 <body>
   <div class="grid-container">
     <div class="header">
-      
+      <h1>Dashboard</h1>
     </div>
     <div class="aside">
       {% include "nav.tmpl" %}
     </div>
     <div class="content">
-      <h3>Login</h3>
+      <h3>Upload</h3>
       <div id="angebote" style="width: 800px;  position: relative; left: 100px;">
         <div id="metaformd">
-          <form action="/login" method="post">
-            <p>Email</p>
-            {{ form.email }}
-            <p>Password</p>
-            {{ form.password }}
-            {{ form.hidden_tag() }}
-            <br>
-            <br>
-            <input type="submit" value="Login">
+          <form method=post enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
           </form>
         </div>
+      </div>
+      <div id="uploads" style="width: 800px;  position: relative; left: 100px;">
+        <h3>Uploads</h3>
+        <ul>
+         {% for files in uploads %}
+             <li><img src="/static/uploads/{{ files.filename }}" width="100"></li>
+         {% endfor %}
+        </ul>
       </div>
     </div>
     <div class="footer">

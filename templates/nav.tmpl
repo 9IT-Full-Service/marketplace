@@ -1,10 +1,18 @@
-<center>
-  <!-- <div class="menu" ><a class="menu" href="/bar">Cases Bar</a></div> -->
-  <div class="menu" >[<a class="menu" href="/dashboard">Angebote</a>] </div>
-  <div class="menu" >[<a class="menu" href="/upload">Upload</a>] </div>
-  <div class="menu" >[<a class="menu" href="/newitem">Neues Angebot</a>] </div>
-  <!-- <div class="menu" ><a class="menu" href="/averagebar">Average Bar</a></div> -->
-  <!-- <div class="menu" >[<a class="menu" href="/average">Average Line</a>] </div>
-  <div class="menu" >[<a class="menu" href="/klopapier">Klopapier DM Essen-Borbeck</a>] </div> -->
+
+  <p>
+    <!-- {{ loggedIn }} -->
+    {% if loggedIn == True %}
+      <p>Du bist eingeloggt als: {{ name }}</p>
+      <div class="menu" ><a class="menu" href="/">Startseite</a> </div>
+      <div class="menu" ><a class="menu" href="/dashboard">Meine Anzeigen</a> </div>
+      <div class="menu" ><a class="menu" href="/upload">Upload</a> </div>
+      <div class="menu" ><a class="menu" href="/newitem">Anzeige aufgeben</a> </div>
+      <div class="menu" ><a class="menu" href='/dashboard/profil'>Profil</a></div>
+      <div class="menu" ><a class="menu" href='/logout'>Logout</a></div>
+      {% else %}
+      <div class="menu" ><a class="menu" href="/">Startseite</a> </div>
+      <p><a class="menu" href='/login'>Login</a></p>
+      <p><a class="menu" href='/register'>Registrieren</a></p>
+    {% endif %}
+  </p>
   <div style="float:clear;"></div>
-</center>
