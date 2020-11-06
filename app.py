@@ -66,22 +66,57 @@ def index():
           userlevel=current_user.userlevel,
           userid=current_user.id,
           data=read_markedplace_active(),
-          categories=categories,
+          # categories=categories,
+          # cats=read_categories(),
+          categories=read_categories(),
           name=name,
-          loggedIn = True,
+          userlist=read_userlist(),
+          loggedIn = "1",
         )
     else:
         return render_template('index.html',
-            loggedIn = False,
+            loggedIn = "0",
             data=read_markedplace_active(),
             categories=categories,
         )
+
+@app.route('/category/<id>', methods=['GET'])
+@login_required
+def categoryId(id):
+    data = read_categories()
+    categories = {}
+    for d in data:
+        categories[id] = d['name']
+    profileExtras = getProfileExtras()
+    for i in profileExtras:
+        name=i['name']
+    if current_user.is_authenticated:
+        return render_template('index.html',
+          pwhash=current_user.password,
+          userlevel=current_user.userlevel,
+          userid=current_user.id,
+          # data=read_markedplace_active(),
+          data=read_category_active(id),
+          # categories=categories,
+          # cats=read_categories(),
+          categories=read_categories(),
+          name=name,
+          userlist=read_userlist(),
+          loggedIn = "1",
+        )
+    else:
+        return render_template('index.html',
+            loggedIn = "0",
+            data=read_markedplace_active(),
+            categories=categories,
+        )
+
 
 @app.route('/dashboard/profil', methods=['GET'])
 @login_required
 def dashboardProfil():
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -95,6 +130,7 @@ def dashboardProfil():
       userid=current_user.id,
       profileExtras=profileExtras,
       name=name,
+      categories=read_categories(),
       loggedIn = loggedIn
     )
 
@@ -119,7 +155,7 @@ def dashboardProfilSave():
 @login_required
 def dashboard():
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -134,7 +170,9 @@ def dashboard():
       userid=current_user.id,
       # data=read_markedplace(),
       data=read_marketplace_my(),
-      categories=categories,
+      # categories=categories,
+      categories=read_categories(),
+      userlist=read_userlist(),
       loggedIn=loggedIn
       # uploads=read_uploads()
     )
@@ -143,7 +181,7 @@ def dashboard():
 @login_required
 def dashboardOffer(id):
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -156,6 +194,7 @@ def dashboardOffer(id):
       data=data,
       id=id,
       uploads=read_uploads(),
+      categories=read_categories(),
       loggedIn=loggedIn
     )
 
@@ -163,7 +202,7 @@ def dashboardOffer(id):
 @login_required
 def dashboardOfferEdit(id):
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -178,8 +217,34 @@ def dashboardOfferEdit(id):
       data=data,
       id=id,
       categories=categories,
+      userlist=read_userlist(),
+      uploads=read_uploads(),
       loggedIn=loggedIn
     )
+
+@app.route('/view/<id>', methods=['GET'])
+@login_required
+def viewOffer(id):
+    if current_user.is_authenticated:
+        loggedIn = "1"
+    profileExtras = getProfileExtras()
+    for i in profileExtras:
+        name=i['name']
+    categories = read_categories()
+    data = read_markedplace_offer(id)
+    print ("data: " + str(data))
+    return render_template('offer.html',
+      name=name,
+      pwhash=current_user.password,
+      userlevel=current_user.userlevel,
+      userid=current_user.id,
+      data=data,
+      id=id,
+      categories=categories,
+      userlist=read_userlist(),
+      loggedIn=loggedIn
+    )
+
 
 @app.route('/newitem', methods=['POST'])
 def addItemSave():
@@ -187,6 +252,8 @@ def addItemSave():
     title = str(request.form['title'])
     description = request.form['description']
     price = request.form['price']
+    image = request.form['image']
+    active = request.form['active']
     category = request.form['category']
     type= request.form['type']
     seller=current_user.id
@@ -199,7 +266,8 @@ def addItemSave():
         'category': category,
         'type': type,
         'seller': str(current_user.id),
-        'active': '0'
+        'active': active,
+        'image': image
         }
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     r = requests.post(apiurl, json=dumps(data), headers=headers)
@@ -207,8 +275,12 @@ def addItemSave():
 
 @app.route('/newitem', methods=['GET'])
 def addItem():
+    data = read_categories()
+    categories = {}
+    for d in data:
+        categories[id] = d['name']
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -217,7 +289,9 @@ def addItem():
     return render_template('newarticle.html',
         seller=current_user.id,
         name=name,
+        categorylist=read_categories(),
         categories=read_categories(),
+        uploads=read_uploads(),
         loggedIn=loggedIn
         )
 
@@ -230,6 +304,7 @@ def dashboardOfferSave(id):
     category = request.form['category']
     type= request.form['type']
     active = request.form['active']
+    image = request.form['image']
     id = request.form['id']
     seller=request.form['userid']
     print ("seller: " + seller)
@@ -242,7 +317,8 @@ def dashboardOfferSave(id):
         'category': category,
         'type': type,
         'seller': seller,
-        'active': active
+        'active': active,
+        'image': image
         }
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     r = requests.post(apiurl, json=dumps(data), headers=headers)
@@ -251,7 +327,7 @@ def dashboardOfferSave(id):
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if current_user.is_authenticated:
-        loggedIn = True
+        loggedIn = "1"
     profileExtras = getProfileExtras()
     for i in profileExtras:
         name=i['name']
@@ -277,6 +353,7 @@ def upload_file():
     return render_template('upload.html',
         uploads=read_uploads(),
         loggedIn=loggedIn,
+        categories=read_categories(),
         name=name
     )
     # return '''
@@ -357,6 +434,15 @@ def read_markedplace_active():
     data = json.loads(response.read())
     return data
 
+def read_category_active(id):
+    data = {}
+    import urllib, json
+    import urllib.request
+    apiurl = "http://api:4006/api/v1/marketplace/categoryactive/" + id
+    response = urllib.request.urlopen(apiurl)
+    data = json.loads(response.read())
+    return data
+
 def read_markedplace_open():
     data = {}
     import urllib, json
@@ -409,6 +495,15 @@ def read_markedplace_myoffer(id):
     import urllib, json
     import urllib.request
     apiurl = "http://api:4006/api/v1/marketplace/myone/" + id
+    response = urllib.request.urlopen(apiurl)
+    data = json.loads(response.read())
+    return data
+
+def read_userlist():
+    data = {}
+    import urllib, json
+    import urllib.request
+    apiurl = "http://api:4006/api/v1/marketplace/profile/users"
     response = urllib.request.urlopen(apiurl)
     data = json.loads(response.read())
     return data

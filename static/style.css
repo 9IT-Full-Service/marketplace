@@ -42,3 +42,13 @@
   background: #f4f4f4;
   padding-left: 25px;
 }
+
+a:link, a:visited {
+  text-decoration: none;
+  color: rgb(9, 145, 173);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: rgb(145, 145, 173);
+}

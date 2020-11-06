@@ -43,12 +43,11 @@ div.menu {
        <div style="float: left; width: 200px"><img width="190" src="{{ offers.image }}"></div>
        <div style="">
          <div style="float: right; width: 500px;">Anbieter: {{ offers.seller }}</div>
+         <div style="float: right; width: 500px;">ID: {{ id }}</div>
          <div style="float: right; width: 500px;">Preis: {{ offers.price }}</div>
          <div style="float: right; width: 500px;">Aktiv: {{ offers.active }}</div>
          <div style="float: right; width: 500px;">Typ: {% if offers.type == "sell" %}Verkaufen{% else %}Gesuch{% endif %}</div>
-         <div style="float: right; width: 500px;">ID: {{ id }}
-         </div>
-         <div style="float: right; width: 500px;">Beschreibung: {{ offers.description }}</div>
+         <div style="float: right; width: 500px;">Beschreibung: <p>{{ offers.description }}</p></div>
        </div>
        <div style="clear: both;"></div>
        <hr>

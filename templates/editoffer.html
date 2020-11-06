@@ -35,7 +35,7 @@
             {% for offer in data %}
             ID: {{ id }}<br />
             Titel: <input name="title" value="{{ offer.title }}"><br />
-            Beschreibung: <br><textarea rows="5" cols="70" name="description">{{offer.description}}</textarea><br />
+            Beschreibung: <br><textarea rows="10" cols="120" name="description">{{offer.description}}</textarea><br />
             Preis: <input name="price" value="{{offer.price}}"><br />
             Kategorie: <select name="category">
               {% for category in categories %}
@@ -45,8 +45,17 @@
               >{{ category.name }}</option>
               {% endfor %}
             </select><br />
+            Bild: <img class="imageview" src="{{ offer.image }}" height="200"><br />
+            <input class="imageurl" size="100" name="image" value="{{ offer.image }}"><br />
             Typ: <input name="type" value="{{offer.type}}"><br />
-            Aktiv: <input name="active" value="{{offer.active}}"></br/ >
+            Aktiv:
+            <!-- <input name="active" value="{{offer.active}}"></br/ > -->
+            <fieldset>
+              <input type="radio" id="vi" name="active" {% if offer.active == "0" %} checked="checked"{% endif %} value="0">
+              <label for="vi"> Deaktivert</label>
+              <input type="radio" id="mc" name="active" {% if offer.active == "1" %} checked="checked"{% endif %} value="1">
+              <label for="mc"> Aktiviert</label>
+            </fieldset>
             {% endfor %}
             <input type="hidden" name="userid" value="{{ userid }}"><br/>
             <input type="hidden" name="id" value="{{ id }}">
@@ -56,6 +65,22 @@
           </form>
         </div>
       </div>
+      <h3>Bilder</h3>
+      <!-- <ul> -->
+       {% for files in uploads %}
+           <span class="lp-element lp-pom-image"><img src="/static/uploads/{{ files.filename }}" height="100"></span>
+       {% endfor %}
+      <!-- </ul> -->
+      <script>
+        jQuery(".lp-pom-image").click(function() {
+          // console.log($("img", this).attr("src"));
+          var imageurl = $("img", this).attr("src");
+          console.log(imageurl);
+          jQuery(".imageurl").val(imageurl);
+          jQuery(".imageview").attr("src", imageurl);
+          return false;
+        });
+      </script>
     </div>
     <div class="footer">
 

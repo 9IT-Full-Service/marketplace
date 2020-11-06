@@ -17,6 +17,7 @@
              }
     });
     $("#"+id).text(response);
+    $("#top-"+id).text(response);
   }
   </script>
   <div class="grid-container">
@@ -29,10 +30,17 @@
   <div class="content">
     <div id="angebote" style="width: 800px;  position: relative; left: 100px;">
        {% for offers in data %}
-         <div style="width: 800px"><h3><a href="/dashboard/offer/edit/{{ offers.id }}">{{ offers.title }}</a></h3></div>
-         <div style="float: left; width: 200px"><img width="190" src="{{ offers.image }}"></div>
+         <div style="width: 800px"><a href="/category/{{ offers.category }}"><span id="top-{{offers.id}}"></span></a> &rarr; <a href="/dashboard/offer/edit/{{ offers.id }}">{{ offers.title }}</a></div>
+         <div style="float: left; width: 200px"><img height="100" src="{{ offers.image }}"></div>
          <div style="">
-           <div style="float: right; width: 500px;">Anbieter: {{ offers.seller }}</div>
+           <div style="float: right; width: 500px;">Anbieter: <!-- {{ offers.seller }} -->
+             {% for user in userlist %}
+                {% if user['userid'] == offers.seller %}
+                  <a href="/user/{{ user['userid'] }}">{{ user['name'] }}</a>
+                {% endif %}
+             {% endfor %}
+           </div>
+           <div style="float: right; width: 500px;">ID: <a href="/dashboard/offer/edit/{{ offers.id }}">{{ offers.id }}</a></div>
            <div style="float: right; width: 500px;">Preis: {{ offers.price }}</div>
             <div style="float: right; width: 500px;">Kategorie: <span id="{{offers.id}}"></span></div>
             <script>
@@ -40,8 +48,7 @@
             </script>
            <div style="float: right; width: 500px;">Aktiv: {{ offers.active }}</div>
            <div style="float: right; width: 500px;">Typ: {% if offers.type == "sell" %}Verkaufen{% else %}Gesuch{% endif %}</div>
-           <div style="float: right; width: 500px;">ID: <a href="/dashboard/offer/edit/{{ offers.id }}">{{ offers.id }}</a></div>
-           <div style="float: right; width: 500px;">Beschreibung: {{ offers.description }}</div>
+           <div style="float: right; width: 500px;">Beschreibung: <p style="white-space:pre-wrap;">{{ offers.description }}</p></div>
          </div>
          <div style="clear: both;"></div>
          <hr>

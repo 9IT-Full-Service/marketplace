@@ -61,11 +61,21 @@ def profileExtras(id):
     json_data = dumps(list_cur, indent = 2, default=str)
     return json_data, 200
 
+@app.route('/api/v1/marketplace/profile/users', methods=["GET"])
+def profileUser():
+    myclient = pymongo.MongoClient("mongodb://mongo:27017/")
+    mydb = myclient["marketplace"]
+    mycol = mydb["profile"]
+    mydoc = mycol.find()
+    list_cur = list(mydoc)
+    json_data = dumps(list_cur, indent = 2, default=str)
+    return json_data, 200
+
 def profilExtrasUpdate(content):
     myclient = pymongo.MongoClient("mongodb://mongo:27017/")
     mydb = myclient["marketplace"]
     mycol = mydb["profile"]
-    print ("Test: " + content['id'])
+    # print ("Test: " + content['id'])
     ObjId = content['id']
     x = mycol.update_one(
         { "userid" : ObjId },
@@ -122,6 +132,16 @@ def marktplace_aktive():
     json_data = dumps(list_cur, indent = 2, default=str)
     return json_data, 200
 
+@app.route('/api/v1/marketplace/categoryactive/<id>', methods=["GET"])
+def category_aktive(id):
+    myclient = pymongo.MongoClient("mongodb://mongo:27017/")
+    mydb = myclient["marketplace"]
+    mycol = mydb["offers"]
+    mydoc = mycol.aggregate([ { "$match" : { "active" : "1", "category": id } },{ "$project": {"id": {"$toString": '$_id' }, "title": "$title", "seller": "$seller", "price": "$price", "type": "$type", "category": "$category", "type": "$type", "image": "$image", "description": "$description", "active":"$active"} } ] )
+    list_cur = list(mydoc)
+    json_data = dumps(list_cur, indent = 2, default=str)
+    return json_data, 200
+
 @app.route('/api/v1/marketplace', methods=["POST"])
 def addItem():
     myclient = pymongo.MongoClient("mongodb://mongo:27017/")
@@ -148,7 +168,8 @@ def offerUpdate():
             'category': content['category'],
             'type': content['type'],
             'seller': content['seller'],
-            'active': content['active']
+            'active': content['active'],
+            'image': content['image']
            }
         } )
     return jsonify({"result":"ok"}), 201

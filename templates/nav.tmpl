@@ -1,7 +1,7 @@
 
   <p>
     <!-- {{ loggedIn }} -->
-    {% if loggedIn == True %}
+    {% if loggedIn == "1" %}
       <p>Du bist eingeloggt als: {{ name }}</p>
       <div class="menu" ><a class="menu" href="/">Startseite</a> </div>
       <div class="menu" ><a class="menu" href="/dashboard">Meine Anzeigen</a> </div>
@@ -16,3 +16,10 @@
     {% endif %}
   </p>
   <div style="float:clear;"></div>
+
+  <p>
+    <h3>Kategorien</h3>
+{% for cat in categories %}
+    <div class="menu" ><a class="menu" href="/category/{{ cat['id'] }}">{{ cat['name']}}</a> </div>
+{% endfor %}
+  </p>
